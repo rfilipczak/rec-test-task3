@@ -64,7 +64,10 @@ public:
     {
         auto [L1_total_pothole_count, L2_total_pothole_count] = count_potholes(L1, L2);
 
-        int best = L1_total_pothole_count;
+        int best = std::max(L1_total_pothole_count, L2_total_pothole_count);
+
+        if (std::min(L1_total_pothole_count, L2_total_pothole_count) == 0)
+            return best; // possible early return when one of the lines have no potholes
 
         int L1_current_potholes_count = 0;
         int L2_current_potholes_count = 0;
@@ -120,6 +123,7 @@ static void test_brute_force_strategy()
             {".xxx...x", "..x.xxxx", 6},
             {"xxxxx", ".x..x", 5},
             {"x...x", "..x..", 2},
+            {"...................", "xxxxxxxxxxxxxxxxxxx", 19}
     };
 
     auto solution = solution_with<BruteForceStrategy>();
