@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <fstream>
+#include <chrono>
 
 class Strategy
 {
@@ -32,6 +34,9 @@ public:
     }
 };
 
+/**
+ * /brief O(N) I think... so not so brute-forcy after all
+ */
 class BruteForceStrategy : public Strategy
 {
 private:
@@ -131,6 +136,30 @@ static void test_brute_force_strategy()
     for (const auto& test : stest_cases)
         show_result(use(solution, test), test.expected);
 
+    std::cout << "-- 200k test --" << '\n';
+    std::string L1, L2;
+    {
+        std::fstream f{"./data.txt"};
+        std::getline(f, L1);
+    }
+
+    {
+        std::fstream f{"./data2.txt"};
+        std::getline(f, L2);
+    }
+
+    using namespace std::chrono;
+
+    auto start = high_resolution_clock::now();
+    auto result = solution.solve(L1, L2);
+    auto end = high_resolution_clock::now();
+
+    std::cout << "Result for 200k chars = " << result << '\n';
+
+    std::cout << "BruteForceStrategy for 200k chars took "
+             << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << "µs ≈ "
+             << (end - start) / 1ms << "ms ≈ " // almost equivalent form of the above, but
+             << (end - start) / 1s << "s.\n";  // using milliseconds and seconds accordingly
 }
 
 int main()
