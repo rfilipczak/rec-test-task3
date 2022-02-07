@@ -5,7 +5,7 @@ Some Codility programming assignment.
 - g++
 - make
 - linux
-- c++20
+- c++17
 
 ### Highlights
 - Strategy design pattern

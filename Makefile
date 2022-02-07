@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++2a -Wpedantic -Wall -Wextra -Wconversion -O3
+CXXFLAGS = -std=c++17 -Wpedantic -Wall -Wextra -Wconversion -O3
 
 SRC = ./main.cpp
 EXEC = ./task3
@@ -14,5 +14,5 @@ $(EXEC): $(SRC)
 clean:
 	rm -rf $(EXEC)
 
-.PHONY: clean
+.PHONY: clean all
 
