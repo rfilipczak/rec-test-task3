@@ -61,6 +61,7 @@ private:
 
     static int calc_score_on_switch(char current_segment, int other_lane_current, int this_lane_total, int this_lane_current)
     {
+
         return this_lane_total - this_lane_current + other_lane_current - is_pothole(current_segment);
     }
 
@@ -121,32 +122,38 @@ static int use(Solution& solution, const test_case& test_case)
     return solution.solve(test_case.L1, test_case.L2);
 }
 
-static void test_brute_force_strategy()
+static void load_test_data(const char* path, std::string& in)
+{
+    std::fstream f{path};
+    std::getline(f, in);
+}
+
+template <typename Strategy>
+static void test_strategy()
 {
     static const test_case stest_cases[] = {
             {"..xx.x.", "x.x.x..", 4},
             {".xxx...x", "..x.xxxx", 6},
             {"xxxxx", ".x..x", 5},
             {"x...x", "..x..", 2},
-            {"...................", "xxxxxxxxxxxxxxxxxxx", 19}
+            {"...................", "xxxxxxxxxxxxxxxxxxx", 19},
+            {"xxxxxxxxxxx", "xxxxxxxxxxx", 11},
+            {"x", "x", 1},
+            {"x", ".", 1},
+            {".", ".", 0},
+            {"..............", "..............", 0},
     };
 
-    auto solution = solution_with<BruteForceStrategy>();
+    auto solution = solution_with<Strategy>();
 
     for (const auto& test : stest_cases)
         show_result(use(solution, test), test.expected);
 
     std::cout << "-- 200k test --" << '\n';
-    std::string L1, L2;
-    {
-        std::fstream f{"./data.txt"};
-        std::getline(f, L1);
-    }
 
-    {
-        std::fstream f{"./data2.txt"};
-        std::getline(f, L2);
-    }
+    std::string L1, L2;
+    load_test_data("./data.txt", L1);
+    load_test_data("./data2.txt", L2);
 
     using namespace std::chrono;
 
@@ -156,14 +163,24 @@ static void test_brute_force_strategy()
 
     std::cout << "Result for 200k chars = " << result << '\n';
 
-    std::cout << "BruteForceStrategy for 200k chars took "
+    std::cout << "Solving for 200k chars input took "
              << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << "µs ≈ "
              << (end - start) / 1ms << "ms ≈ " // almost equivalent form of the above, but
              << (end - start) / 1s << "s.\n";  // using milliseconds and seconds accordingly
 }
 
+class FailingStrategy : public Strategy
+{
+public:
+    [[nodiscard]] int solve(const std::string &L1 [[maybe_unused]], const std::string &L2 [[maybe_unused]]) const override
+    {
+        return -1;
+    }
+};
+
 int main()
 {
-    test_brute_force_strategy();
+    test_strategy<BruteForceStrategy>();
+    test_strategy<FailingStrategy>();
     return 0;
 }
