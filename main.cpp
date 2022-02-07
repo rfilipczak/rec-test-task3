@@ -61,13 +61,14 @@ private:
 
     static int calc_score_on_switch(char current_segment, int other_lane_current, int this_lane_total, int this_lane_current)
     {
-
         return this_lane_total - this_lane_current + other_lane_current - is_pothole(current_segment);
     }
 
 public:
     [[nodiscard]] int solve(const std::string& L1, const std::string& L2) const override
     {
+        // general gist of the algorithm is to decide on which segment should the change of lanes happen (if at all)
+
         auto [L1_total_pothole_count, L2_total_pothole_count] = count_potholes(L1, L2);
 
         int best = std::max(L1_total_pothole_count, L2_total_pothole_count);
@@ -105,9 +106,11 @@ Solution solution_with()
 }
 
 template <typename ResultType>
-static void show_result(const ResultType& got, const ResultType& expected)
+static bool show_result(const ResultType& got, const ResultType& expected)
 {
-    std::cout << (got == expected ? "[ PASSED ]" : "[ FAILED ]") << " Got: " << got << " expected: " << expected << '\n';
+    auto passed = (got == expected);
+    std::cout << (passed ? "[ PASSED ]" : "[ FAILED ]") << " Got: " << got << " expected: " << expected << '\n';
+    return passed;
 }
 
 struct test_case
@@ -117,7 +120,7 @@ struct test_case
     int expected;
 };
 
-static int use(Solution& solution, const test_case& test_case)
+static int apply(Solution& solution, const test_case& test_case)
 {
     return solution.solve(test_case.L1, test_case.L2);
 }
@@ -131,7 +134,7 @@ static void load_test_data(const char* path, std::string& in)
 template <typename Strategy>
 static void test_strategy()
 {
-    static const test_case stest_cases[] = {
+    static const test_case test_cases[] = {
             {"..xx.x.", "x.x.x..", 4},
             {".xxx...x", "..x.xxxx", 6},
             {"xxxxx", ".x..x", 5},
@@ -142,12 +145,20 @@ static void test_strategy()
             {"x", ".", 1},
             {".", ".", 0},
             {"..............", "..............", 0},
+            {"x.x.x.x.x.x.x.", ".x.x.x.x.x.x.x", 7},
+            {"x.x.x.x.x.x.x.", ".x.x.xxx.x.x.x", 8},
+            {"xxxx...", "xx.x.xx", 6},
+            {".....xxx..........", "xxx.........xxxxxx", 9},
+            {".....xxx..........", "xxx.........xxxxxx", 9},
     };
 
     auto solution = solution_with<Strategy>();
+    auto passed = 0;
 
-    for (const auto& test : stest_cases)
-        show_result(use(solution, test), test.expected);
+    for (const auto& test : test_cases)
+        passed += show_result(apply(solution, test), test.expected);
+
+    std::cout << "Passed " << passed << " / " << std::size(test_cases) << '\n';
 
     std::cout << "-- 200k test --" << '\n';
 
@@ -180,7 +191,7 @@ public:
 
 int main()
 {
-    test_strategy<BruteForceStrategy>();
     test_strategy<FailingStrategy>();
+    test_strategy<BruteForceStrategy>();
     return 0;
 }
