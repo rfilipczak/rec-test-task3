@@ -2,6 +2,7 @@
 #include <chrono>
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "Solution.hpp"
 #include "BruteForceStrategy.hpp"
@@ -44,11 +45,19 @@ TEST_F(BruteForceStrategyTest, IsFastEnough)
     testhelp::load_test_data("../test/data.txt", L1);
     testhelp::load_test_data("../test/data2.txt", L2);
 
+    ASSERT_EQ(L1.length(), 200'000);
+    ASSERT_EQ(L2.length(), 200'000);
+
     using namespace std::chrono;
 
     auto start = high_resolution_clock::now();
     auto result = solution.solve(L1, L2);
     auto end = high_resolution_clock::now();
+
+    using ::testing::AllOf;
+    using ::testing::Le;
+    using ::testing::Gt;
+    ASSERT_THAT(result, AllOf(Gt(0), Le(200'000)));
 
     auto time = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
     EXPECT_LT(time, 1);
