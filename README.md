@@ -10,7 +10,6 @@ Some Codility programming assignment.
 ### Highlights
 - Strategy design pattern
 - unique_ptr's
-- some rough handwritten tests
 - O(N) solution
 - gtest
 
