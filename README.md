@@ -3,7 +3,7 @@ Some Codility programming assignment.
 
 ### Requirements
 - g++
-- make
+- cmake
 - linux
 - c++17
 
@@ -11,9 +11,16 @@ Some Codility programming assignment.
 - Strategy design pattern
 - unique_ptr's
 - some rough handwritten tests
-- O(N) solution*
-
-*maybe and only if it actually works
+- O(N) solution
+- gtest
 
 ### TODO
-- use gtest
+- [x] use gtest
+
+### Quickstart
+
+```console
+$ cmake -S . -B build
+$ cmake --build build
+$ cd build && ctest
+```
