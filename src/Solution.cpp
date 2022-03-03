@@ -1,4 +1,4 @@
-#include "../include/Solution.hpp"
+#include "Solution.hpp"
 
 Solution::Solution(std::unique_ptr<Strategy> strategy)
         : strategy_(std::move(strategy))

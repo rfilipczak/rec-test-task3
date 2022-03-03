@@ -13,6 +13,11 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+include_directories(
+    ./test
+    ./include
+)
+
 add_executable(
     BruteForceStrategyTest
     ./test/BruteForceStrategyTest.cpp

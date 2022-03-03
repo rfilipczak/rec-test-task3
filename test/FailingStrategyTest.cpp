@@ -2,8 +2,8 @@
 
 #include <gtest/gtest.h>
 
-#include "../include/Solution.hpp"
-#include "../include/FailingStrategy.hpp"
+#include "Solution.hpp"
+#include "FailingStrategy.hpp"
 
 
 class FailingStrategyTest: public ::testing::Test

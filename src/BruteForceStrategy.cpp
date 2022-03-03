@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "../include/BruteForceStrategy.hpp"
+#include "BruteForceStrategy.hpp"
 
 
 std::array<int,2> BruteForceStrategy::count_potholes(const std::string& L1, const std::string& L2)

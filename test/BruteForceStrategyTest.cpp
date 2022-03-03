@@ -3,10 +3,10 @@
 
 #include <gtest/gtest.h>
 
-#include "../include/Solution.hpp"
-#include "../include/BruteForceStrategy.hpp"
+#include "Solution.hpp"
+#include "BruteForceStrategy.hpp"
 
-#include "./TestHelp.hpp"
+#include "TestHelp.hpp"
 
 class BruteForceStrategyTest : public ::testing::Test
 {
@@ -40,7 +40,7 @@ TEST_F(BruteForceStrategyTest, PassessAdditionalTests)
 TEST_F(BruteForceStrategyTest, IsFastEnough)
 {
     std::string L1, L2;
-    
+
     testhelp::load_test_data("../test/data.txt", L1);
     testhelp::load_test_data("../test/data2.txt", L2);
 
