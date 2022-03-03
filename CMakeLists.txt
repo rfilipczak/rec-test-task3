@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(task3)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_DEBUG "-Wpedantic -Wall -Wextra" CACHE STRING "")
 
 include(FetchContent)
@@ -32,10 +32,8 @@ endif()
 enable_testing()
 
 include_directories(
-    ./test
     ./include
 )
-
 
 add_executable(
     BruteForceStrategyTest

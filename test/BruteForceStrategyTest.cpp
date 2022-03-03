@@ -1,5 +1,6 @@
 #include <memory>
 #include <chrono>
+#include <random>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -42,11 +43,30 @@ TEST_F(BruteForceStrategyTest, IsFastEnough)
 {
     std::string L1, L2;
 
-    testhelp::load_test_data("../test/data.txt", L1);
-    testhelp::load_test_data("../test/data2.txt", L2);
+    const std::string VALID_CHARS = ".x";
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0,VALID_CHARS.size() - 1);
+
+    std::generate_n(std::back_inserter(L1), 200'000, [&]()
+    {
+        return VALID_CHARS[distribution(generator)];
+    });
+
+    std::generate_n(std::back_inserter(L2), 200'000, [&]()
+    {
+        return VALID_CHARS[distribution(generator)];
+    });
 
     ASSERT_EQ(L1.length(), 200'000);
     ASSERT_EQ(L2.length(), 200'000);
+
+    ASSERT_EQ(std::ranges::all_of(L1, [](char c){
+        return (c == 'x' || c == '.');
+    }), true);
+
+    ASSERT_EQ(std::ranges::all_of(L2, [](char c){
+        return (c == 'x' || c == '.');
+    }), true);
 
     using namespace std::chrono;
 
